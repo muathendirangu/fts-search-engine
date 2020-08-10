@@ -4,13 +4,14 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type document struct {
-	Title    string `xml:"title"`
-	URL      string `xml:"url"`
-	Abstract string `xml:"abstract"`
-	ID       int
+	Title string `xml:"title"`
+	URL   string `xml:"url"`
+	Text  string `xml:"abstract"`
+	ID    int
 }
 
 func loadDocuments(path string) ([]document, error) {
@@ -34,6 +35,16 @@ func loadDocuments(path string) ([]document, error) {
 		docs[i].ID = i
 	}
 	return docs, nil
+}
+
+func search(docs []document, term string) []document {
+	var r []document
+	for _, doc := range docs {
+		if strings.Contains(doc.Text, term) {
+			r = append(r, doc)
+		}
+	}
+	return r
 }
 
 func main() {
